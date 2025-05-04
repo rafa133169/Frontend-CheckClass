@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import Endpoint from '../Endpoint';
 
 
 const LoginForm = ({ onLogin }) => {
@@ -26,7 +27,7 @@ const LoginForm = ({ onLogin }) => {
     
     try {
       // Hacer la petición al endpoint de login
-      const response = await axios.post('http://localhost:3000/users/login', {
+      const response = await axios.post(Endpoint.users.login, {
         email: credentials.email,
         password: credentials.password
       });

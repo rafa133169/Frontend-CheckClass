@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import Endpoint from '../Endpoint';
 
 const RegisterForm = () => {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
       // Preparar datos para el endpoint (eliminamos confirmPassword que no va al backend)
       const { confirmPassword, ...userData } = formData;
 
-      const response = await axios.post('http://localhost:3000/users/register', userData);
+      const response = await axios.post(Endpoint.users.register, userData);
       
       // Opcional: Guardar usuario en localStorage y redirigir
     //   localStorage.setItem('currentUser', JSON.stringify(response.data));

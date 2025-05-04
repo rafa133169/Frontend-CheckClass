@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Endpoint from '../Endpoint';
 
 const AdminPanel = () => {
   const [students, setStudents] = useState([]);
@@ -29,7 +30,7 @@ const AdminPanel = () => {
   const fetchStudents = async () => {
     try {
       setLoading(prev => ({ ...prev, students: true }));
-      const response = await axios.get('http://localhost:3000/users/students');
+      const response = await axios.get(Endpoint.users.getStudents);
       setStudents(response.data);
     } catch (error) {
       console.error('Error fetching students:', error);
@@ -41,7 +42,7 @@ const AdminPanel = () => {
   const fetchTeachers = async () => {
     try {
       setLoading(prev => ({ ...prev, teachers: true }));
-      const response = await axios.get('http://localhost:3000/users/teachers');
+      const response = await axios.get(Endpoint.users.getTeachers);
       setTeachers(response.data);
     } catch (error) {
       console.error('Error fetching teachers:', error);
@@ -52,7 +53,7 @@ const AdminPanel = () => {
 
   const handleRoleUpdate = async (userId, newRole) => {
     try {
-      await axios.patch(`http://localhost:3000/users/${userId}/role`, { role: newRole });
+      await axios.patch(Endpoint.users.updateRole(userId), { role: newRole });
       
       // Update local state
       const updatedStudents = students.map(student => 
@@ -78,11 +79,11 @@ const AdminPanel = () => {
     return nameMatch && enrollmentMatch;
   });
 
-  const filteredTeachers = teachers.filter(teacher => {
-    const nameMatch = teacher.name?.toLowerCase().includes(filters.teachers.name.toLowerCase());
-    const enrollmentMatch = teacher.enrollment?.toLowerCase().includes(filters.teachers.enrollment.toLowerCase());
-    return nameMatch && enrollmentMatch;
-  });
+  // const filteredTeachers = teachers.filter(teacher => {
+  //   const nameMatch = teacher.name?.toLowerCase().includes(filters.teachers.name.toLowerCase());
+  //   const enrollmentMatch = teacher.enrollment?.toLowerCase().includes(filters.teachers.enrollment.toLowerCase());
+  //   return nameMatch && enrollmentMatch;
+  // });
 
   return (
     <div className="bg-white p-4 md:p-6 rounded-xl shadow-md">

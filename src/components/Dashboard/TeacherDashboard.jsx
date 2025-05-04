@@ -5,6 +5,7 @@ import AttendanceTable from '../Attendance/AttendanceTable';
 import AttendanceStats from '../Stats/AttendanceStats';
 import ClassSelector from '../Class/ClassSelector';
 import axios from 'axios';
+import Endpoint from '../Endpoint';
 
 const TeacherDashboard = () => {
   const [qrCode, setQrCode] = useState('');
@@ -38,7 +39,7 @@ const TeacherDashboard = () => {
         teacherId: currentUser.id
       };
 
-      const response = await axios.post('http://localhost:3000/classes', classData);
+      const response = await axios.post(Endpoint.classes.create , classData);
       
       // Actualizar lista de clases
       await fetchClasses();
@@ -159,7 +160,7 @@ const TeacherDashboard = () => {
   const fetchClasses = async () => {
     try {
       setLoading(prev => ({ ...prev, classes: true }));
-      const response = await axios.get('http://localhost:3000/classes');
+      const response = await axios.get(Endpoint.classes.getAll);
       setClasses(response.data);
       if (response.data.length > 0 && !selectedClass) {
         setSelectedClass(response.data[0].id);
@@ -178,7 +179,7 @@ const TeacherDashboard = () => {
     
     try {
       setLoading(prev => ({ ...prev, attendance: true }));
-      const response = await axios.get('http://localhost:3000/attendance', {
+      const response = await axios.get(Endpoint.attendance.getAll, {
         params: { classId }
       });
       
@@ -243,7 +244,7 @@ const TeacherDashboard = () => {
       };
   
       // Guardar en la base de datos
-      const response = await axios.post('http://localhost:3000/qr/generate', qrData);
+      const response = await axios.post(Endpoint.qr.generate, qrData);
       console.log('QR guardado en BD:', response.data);
   
     } catch (err) {
@@ -255,7 +256,7 @@ const TeacherDashboard = () => {
   const updateAttendance = async (updatedStudent) => {
     try {
       // Actualizar en el backend
-      await axios.patch(`http://localhost:3000/attendance/${updatedStudent.id}`, {
+      await axios.patch(Endpoint.attendance.getByStudent(updatedStudent.id), {
         status: updatedStudent.status,
         reason: updatedStudent.reason
       });

@@ -4,6 +4,7 @@ import QRScanner from '../QRScanner';
 import AttendanceChart from '../Charts/AttendanceChart';
 import ClassFilter from '../Filters/ClassFilter';
 import axios from 'axios';
+import Endpoint from '../Endpoint';
 
 const StudentDashboard = () => {
   const [attendanceStats, setAttendanceStats] = useState({
@@ -57,7 +58,7 @@ const StudentDashboard = () => {
   const handleScanSuccess = async (qrData) => {
     try {
       // 1. Obtener lista de QR activos desde el backend
-      const qrResponse = await axios.get('http://localhost:3000/qr/list');
+      const qrResponse = await axios.get(Endpoint.qr.listAll);
       const activeQRs = qrResponse.data;
       
       // 2. Buscar coincidencia con el QR escaneado
@@ -97,7 +98,7 @@ const StudentDashboard = () => {
       
       // 5. Registrar asistencia en el backend
       const attendanceResponse = await axios.post(
-        'http://localhost:3000/attendance',
+        Endpoint.attendance.create,
         attendanceData
       );
       
